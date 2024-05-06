@@ -119,7 +119,10 @@ private:
         leftChild->right = node;
         node->parent = leftChild;
     }
+    void fixRemove(Node<TypeKey, TypeData>* node) {
+        Node<TypeKey, TypeData>* brother;
 
+    }
     void fixInsertion(Node<TypeKey, TypeData>* node) {
         while (node->parent != nullptr && node->parent->color == RED) {
             if (node->parent == node->parent->parent->left) {
@@ -217,8 +220,8 @@ public:
         if (node == nullptr) {
             return true;
         }
-        updateHeight(node);
         if (updateHeights(node->left) && updateHeights(node->right)) {
+            updateHeight(node);
             return true;
         }
     }
@@ -232,6 +235,7 @@ public:
                 tmp = tmp->right;
             }
         }
+        Color vcolor = tmp->color;
         if (tmp->left == nullptr && tmp->right == nullptr) {
             Node<TypeKey, TypeData>* parent = tmp->parent;
             if (parent != nullptr && key < parent->key) {
@@ -242,6 +246,9 @@ public:
             }
             else if (parent == nullptr) {
                 root = nullptr;
+            }
+            if (tmp->color == BLACK) {
+                fixRemove(parent);
             }
             delete tmp;
         }
@@ -256,7 +263,9 @@ public:
                 root = tmp->right;
             }
             tmp->right->parent = tmp->parent;
-            fixInsertion(tmp->right);
+            if (tmp->color == BLACK) {
+                fixRemove(tmp->right);
+            }
             delete tmp;
         }
         else if (tmp->right == nullptr) {
@@ -270,7 +279,9 @@ public:
                 root = tmp->left;
             }
             tmp->left->parent = tmp->parent;
-            fixInsertion(tmp->left);
+            if (tmp->color == BLACK) {
+                fixRemove(tmp->left);
+            }
             delete tmp;
         }
         else {

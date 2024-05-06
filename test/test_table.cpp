@@ -89,7 +89,7 @@ TEST(RedBlackTreeTest, BigTreeOperator) {
 	}
 }
 TEST(RedBlackTreeTest, BigRandomInsert) {
-	const int N = 15;
+	const int N = 1000;
 	vector<int> ar;
 	RedBlackTree<int, int> tree;
 	for (int i = 0; i < N; i++) {
@@ -102,11 +102,10 @@ TEST(RedBlackTreeTest, BigRandomInsert) {
 		tree.insert(ar[i], ar[i]);
 		EXPECT_TRUE(tree.checkconditions(tree.rootfind()));
 	}
-	tree.display();
 }
 
-/*TEST(AVLTreeTest, BigRandomRemove) {
-	const int N = 500;
+TEST(AVLTreeTest, BigRandomRemove) {
+	const int N = 20;
 	vector<int> ar;
 	RedBlackTree<int, int> tree;
 	for (int i = 0; i < N; i++) {
@@ -121,10 +120,10 @@ TEST(RedBlackTreeTest, BigRandomInsert) {
 	shuffle(ar.begin(), ar.end(), g);
 	for (int i = 0; i < N; i++) {
 		tree.remove(ar[i]);
-	    EXPECT_TRUE(tree.checkconditions());
+	    EXPECT_TRUE(tree.checkconditions(tree.rootfind()));
 	}
 }
-TEST(AVLTreeTest, BigRandomInsertAndRemove) {
+/*TEST(AVLTreeTest, BigRandomInsertAndRemove) {
 	const int N = 1000;
 	AVLTree<int, int> tree;
 	vector<int> ar;

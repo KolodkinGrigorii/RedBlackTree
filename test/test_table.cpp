@@ -100,12 +100,13 @@ TEST(RedBlackTreeTest, BigRandomInsert) {
 	shuffle(ar.begin(), ar.end(), g);
 	for (int i = 0; i < N; i++) {
 		tree.insert(ar[i], ar[i]);
+		ASSERT_NO_THROW(tree.find(ar[i]));
 		EXPECT_TRUE(tree.checkconditions(tree.rootfind()));
 	}
 }
 
 TEST(AVLTreeTest, BigRandomRemove) {
-	const int N = 20;
+	const int N = 1000;
 	vector<int> ar;
 	RedBlackTree<int, int> tree;
 	for (int i = 0; i < N; i++) {
@@ -116,6 +117,8 @@ TEST(AVLTreeTest, BigRandomRemove) {
 	shuffle(ar.begin(), ar.end(), g);
 	for (int i = 0; i < N; i++) {
 		tree.insert(ar[i], ar[i]);
+		ASSERT_NO_THROW(tree.find(ar[i]));
+		EXPECT_TRUE(tree.checkconditions(tree.rootfind()));
 	}
 	shuffle(ar.begin(), ar.end(), g);
 	for (int i = 0; i < N; i++) {

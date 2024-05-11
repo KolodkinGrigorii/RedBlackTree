@@ -120,8 +120,124 @@ private:
         node->parent = leftChild;
     }
     void fixRemove(Node<TypeKey, TypeData>* node) {
-        Node<TypeKey, TypeData>* brother;
+        while (node->parent != nullptr && node->color == BLACK) {
+            if (node == node->parent->left) {
+                Node<TypeKey, TypeData>* sibling = node->parent->right;
 
+                if (sibling->color == RED) {
+                    sibling->color = BLACK;
+                    node->parent->color = RED;
+                    rotateLeft(node->parent);
+                    sibling = node->parent->right;
+                }
+
+                if (sibling->left->color == BLACK && sibling->right->color == BLACK) {
+                    sibling->color = RED;
+                    node = node->parent;
+                }
+                else {
+                    if (sibling->right->color == BLACK) {
+                        sibling->left->color = BLACK;
+                        sibling->color = RED;
+                        rotateRight(sibling);
+                        sibling = node->parent->right;
+                    }
+                    sibling->color = node->parent->color;
+                    node->parent->color = BLACK;
+                    sibling->right->color = BLACK;
+                    rotateLeft(node->parent);
+                    node = root;
+                }
+            }
+            else if (node==node->parent->right){
+                Node<TypeKey, TypeData>* sibling = node->parent->left;
+
+                if (sibling->color == RED) {
+                    sibling->color = BLACK;
+                    node->parent->color = RED;
+                    rotateRight(node->parent);
+                    sibling = node->parent->left;
+                }
+
+                if (sibling->right->color == BLACK && sibling->left->color == BLACK) {
+                    sibling->color = RED;
+                    node = node->parent;
+                }
+                else {
+                    if (sibling->left->color == BLACK) {
+                        sibling->right->color = BLACK;
+                        sibling->color = RED;
+                        rotateLeft(sibling);
+                        sibling = node->parent->left;
+                    }
+                    sibling->color = node->parent->color;
+                    node->parent->color = BLACK;
+                    sibling->left->color = BLACK;
+                    rotateRight(node->parent);
+                    node = root;
+                }
+            }
+            else {
+                if (node->parent->left==nullptr) {
+                    Node<TypeKey, TypeData>* sibling = node->parent->right;
+
+                    if (sibling->color == RED) {
+                        sibling->color = BLACK;
+                        node->parent->color = RED;
+                        rotateLeft(node->parent);
+                        sibling = node->parent->right;
+                    }
+
+                    if ((sibling->left==nullptr && sibling->right==nullptr) || (sibling->left!=nullptr && sibling->right!=nullptr && sibling->left->color == BLACK && sibling->right->color == BLACK)) {
+                        sibling->color = RED;
+                        node = node->parent;
+                    }
+                    else {
+                        if (sibling->right==nullptr || sibling->right->color == BLACK) {
+                            sibling->left->color = BLACK;
+                            sibling->color = RED;
+                            rotateRight(sibling);
+                            sibling = node->parent->right;
+                        }
+                        sibling->color = node->parent->color;
+                        node->parent->color = BLACK;
+                        sibling->right->color = BLACK;
+                        rotateLeft(node->parent);
+                        node = root;
+                    }
+                }
+                else if (node->parent->right==nullptr) {
+                    Node<TypeKey, TypeData>* sibling = node->parent->left;
+
+                    if (sibling->color == RED) {
+                        sibling->color = BLACK;
+                        node->parent->color = RED;
+                        rotateRight(node->parent);
+                        sibling = node->parent->left;
+                    }
+
+                    if ((sibling->left == nullptr && sibling->right == nullptr) || (sibling->left!=nullptr && sibling->right!=nullptr && sibling->left->color == BLACK && sibling->right->color == BLACK)) {
+                        sibling->color = RED;
+                        node = node->parent;
+                    }
+                    else {
+                        if (sibling->left==nullptr || sibling->left->color == BLACK) {
+                            sibling->right->color = BLACK;
+                            sibling->color = RED;
+                            rotateLeft(sibling);
+                            sibling = node->parent->left;
+                        }
+                        sibling->color = node->parent->color;
+                        node->parent->color = BLACK;
+                        sibling->left->color = BLACK;
+                        rotateRight(node->parent);
+                        node = root;
+                    }
+                }
+            }
+        }
+        node->color = BLACK;
+        updateHeights(root);
     }
     void fixInsertion(Node<TypeKey, TypeData>* node) {
         while (node->parent != nullptr && node->parent->color == RED) {
@@ -248,7 +364,7 @@ public:
                 root = nullptr;
             }
             if (tmp->color == BLACK) {
-                fixRemove(parent);
+                fixRemove(tmp);
             }
             delete tmp;
         }
